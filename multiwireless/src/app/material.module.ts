@@ -12,7 +12,8 @@ import {
 	MatExpansionModule,
 	MatIconModule,
 	MatToolbarModule,
-	MatDividerModule
+	MatDividerModule,
+	MatProgressSpinnerModule
 } from '@angular/material';
 
 
@@ -26,7 +27,8 @@ const modules = [
 	MatExpansionModule,
 	MatIconModule,
 	MatToolbarModule,
-	MatDividerModule
+	MatDividerModule,
+	MatProgressSpinnerModule
 ];
 
 @NgModule({

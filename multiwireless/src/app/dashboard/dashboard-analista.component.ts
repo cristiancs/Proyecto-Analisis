@@ -1,13 +1,18 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import {FormControl} from '@angular/forms';
 
-
+import { DashboardService } from './dashboard.service';
+import { Vehiculo } from './vehiculo.model';
 @Component({
     selector: 'app-dashboard-analista',
-    templateUrl: './app-dashboard-analista.component.html'
+    templateUrl: './app-dashboard-analista.component.html',
+    styleUrls: ['./app-dashboard-analista.component.css'],
+    providers: [ DashboardService ]
 })
-export class DashboardAnalistaComponent{
-    toppings = new FormControl();
+export class DashboardAnalistaComponent implements OnInit{
+    constructor(private dashboardService: DashboardService) {}
+
+   
     ListaDatos = ['Asset_id',
         'Ts',
         'Dev_id',
@@ -30,4 +35,16 @@ export class DashboardAnalistaComponent{
         'Axle weight 1',
         'Axle weight 2'
     ];
+
+    vehiculos: Vehiculo[];
+    loading = true;
+
+    ngOnInit() {
+        this.dashboardService
+            .getVehiculos()
+            .then((vehiculos: Vehiculo[]) => {
+                    this.vehiculos = vehiculos;
+                    this.loading = false;
+                });
+        }
 }

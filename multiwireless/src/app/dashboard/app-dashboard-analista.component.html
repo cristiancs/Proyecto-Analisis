@@ -1,29 +1,33 @@
-<h2>Seleccione Vehiculo</h2>
-<mat-accordion>
-    <mat-expansion-panel>
-        <mat-expansion-panel-header>
-        <mat-panel-title>
-            DJ2345
-        </mat-panel-title>
-        <mat-panel-description>
-            Santiago - Concepción
-        </mat-panel-description>
-        </mat-expansion-panel-header>
-    
-        <mat-form-field>
-            <input matInput type="date" placeholder="Fecha Inicio">
-        </mat-form-field>
-        <mat-form-field>
-             <input matInput type="date" placeholder="Fecha Termino">
-        </mat-form-field>
-        <mat-divider></mat-divider>
-        <mat-form-field>
-            <mat-select placeholder="Datos"  multiple>
-                <mat-option *ngFor="let dato of ListaDatos" [value]="dato">{{dato}}</mat-option>
-            </mat-select>
-        </mat-form-field>
-        <mat-divider></mat-divider>
-        <button mat-raised-button color="primary">Descargar</button>
+<div class="Vehiculos-listado">
+    <h2>Seleccione Vehiculo</h2>
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <mat-accordion *ngIf="!loading">
+         
+        <mat-expansion-panel *ngFor="let vehiculo of vehiculos" data-id="{{vehiculo.id}}"  class="vehiculo">
+            <mat-expansion-panel-header>
+            <mat-panel-title>
+                {{vehiculo.patente}}
+            </mat-panel-title>
+            <mat-panel-description>
+                    {{vehiculo.ruta}}
+            </mat-panel-description>
+            </mat-expansion-panel-header>
+        
+            <mat-form-field>
+                <input matInput type="date" placeholder="Fecha Inicio">
+            </mat-form-field>
+            <mat-form-field>
+                <input matInput type="date" placeholder="Fecha Termino">
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <mat-form-field>
+                <mat-select placeholder="Datos"  multiple>
+                    <mat-option *ngFor="let dato of ListaDatos" [value]="dato">{{dato}}</mat-option>
+                </mat-select>
+            </mat-form-field>
+            <mat-divider></mat-divider>
+            <button mat-raised-button color="primary">Descargar</button>
 
-    </mat-expansion-panel>
-</mat-accordion>
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>
