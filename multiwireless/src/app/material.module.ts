@@ -1,17 +1,32 @@
 import { NgModule } from '@angular/core';
 
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
-import { 
+
+
+import {
 	MatButtonModule,
- 	MatCheckboxModule,
- 	MatIconModule
+	MatCheckboxModule,
+	MatInputModule,
+	MatSelectModule,
+	MatFormFieldModule,
+	MatExpansionModule,
+	MatIconModule,
+	MatToolbarModule,
+	MatDividerModule
 } from '@angular/material';
 
 
 const modules = [
 	BrowserAnimationsModule,
 	MatButtonModule,
-	MatCheckboxModule
+	MatCheckboxModule,
+	MatInputModule,
+	MatSelectModule,
+	MatFormFieldModule,
+	MatExpansionModule,
+	MatIconModule,
+	MatToolbarModule,
+	MatDividerModule
 ];
 
 @NgModule({
