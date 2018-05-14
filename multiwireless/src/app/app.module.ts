@@ -2,7 +2,7 @@ import { BrowserModule } from '@angular/platform-browser';
 import { NgModule } from '@angular/core';
 import { DataTablesModule } from 'angular-datatables';
 import { HttpClientModule } from '@angular/common/http';
-
+import { FormsModule } from '@angular/forms';
 import 'hammerjs';
 
 
@@ -20,7 +20,8 @@ import {DashboardAnalistaComponent} from './dashboard/dashboard-analista.compone
     BrowserModule,
     materialModule,
     DataTablesModule,
-    HttpClientModule
+    HttpClientModule,
+    FormsModule
   ],
   providers: [],
   bootstrap: [AppComponent]

@@ -1,7 +1,11 @@
 import { Injectable } from '@angular/core';
-import { HttpClient } from '@angular/common/http';
+import { HttpClient, HttpHeaders } from '@angular/common/http';
+import { Response } from '@angular/http';
 import { environment } from '../../environments/environment';
 import * as urljoin from 'url-join';
+import {Observable} from 'rxjs/Observable';
+import 'rxjs/Rx';
+import 'rxjs/add/operator/toPromise';
 
 
 import { Vehiculo } from './vehiculo.model';
@@ -11,12 +15,12 @@ import { Enlace } from './enlace.model';
 export class DashboardService {
     private vehiculosUrl: string;
     constructor(private http: HttpClient) {
-        this.vehiculosUrl = urljoin(environment.apiUrl, 'vehiculos?empresa_id=1');
+        this.vehiculosUrl = urljoin(environment.apiUrl, 'vehiculos');
     }
 
 
     getVehiculos(): Promise<void | Vehiculo[]> {
-        return this.http.get(this.vehiculosUrl)
+        return this.http.get(urljoin(this.vehiculosUrl, '?empresa_id=1'))
                 .toPromise()
                 .then(response => response as Vehiculo[])
                 .catch(this.handleError);
@@ -29,15 +33,16 @@ export class DashboardService {
 
     }
 
-    getData(): Promise<void | Enlace> {
-        const url = urljoin(this.vehiculosUrl, '?empresas_id=1');
-        return this.http.get(url)
-                .toPromise()
-                .then(response => { 
+    getData(data) {
+        const body = JSON.stringify(data);
+        const headers = new HttpHeaders({'Content-Type': 'application/json'});
+        const url = urljoin(this.vehiculosUrl, 'fetchData');
+        return this.http.post(url, body, { headers })
+                .map((response: Response) => {
                     this.download(response.url, 'export.csv');
-                    return 'success';
+                    return {'status': 'success'};
                 })
-                .catch(this.handleError);
+                .catch((error: Response) => Observable.throw(error));
     }
     download(dataurl, filename) {
         const a = document.createElement('a');

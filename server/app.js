@@ -6,6 +6,7 @@ import { auth, vehiculos } from './routes';
 
 const debug = new Debug("mw:root")
 const app = express()
+app.use('/public', express.static('public'));
 
 if (process.env.NODE_ENV === 'development') {
 	app.use((req, res, next) => {

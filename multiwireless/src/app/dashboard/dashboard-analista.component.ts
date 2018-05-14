@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
-import {FormControl} from '@angular/forms';
+import {FormControl, NgForm} from '@angular/forms';
 
 import { DashboardService } from './dashboard.service';
 import { Vehiculo } from './vehiculo.model';
+import { subscribeOn } from 'rxjs/operator/subscribeOn';
 @Component({
     selector: 'app-dashboard-analista',
     templateUrl: './app-dashboard-analista.component.html',
@@ -45,6 +46,15 @@ export class DashboardAnalistaComponent implements OnInit{
             .then((vehiculos: Vehiculo[]) => {
                     this.vehiculos = vehiculos;
                     this.loading = false;
-                });
-        }
+            });
+    }
+
+    onSubmit(form: NgForm){
+        console.log(form.value);
+        this.dashboardService.getData(form.value)
+        .subscribe(
+            status => {status === 'succes' ? console.log("Descarga Realizada") : console.log(status)},
+            error => {console.warn(error)}
+        );
+    }
 }

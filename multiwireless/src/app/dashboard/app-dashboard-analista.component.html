@@ -12,22 +12,23 @@
                     {{vehiculo.ruta}}
             </mat-panel-description>
             </mat-expansion-panel-header>
-        
-            <mat-form-field>
-                <input matInput type="date" placeholder="Fecha Inicio">
-            </mat-form-field>
-            <mat-form-field>
-                <input matInput type="date" placeholder="Fecha Termino">
-            </mat-form-field>
-            <mat-divider></mat-divider>
-            <mat-form-field>
-                <mat-select placeholder="Datos"  multiple>
-                    <mat-option *ngFor="let dato of ListaDatos" [value]="dato">{{dato}}</mat-option>
-                </mat-select>
-            </mat-form-field>
-            <mat-divider></mat-divider>
-            <button mat-raised-button color="primary">Descargar</button>
-
+            <form (ngSubmit)="onSubmit(f)" #f="ngForm"  > 
+                <mat-form-field>
+                    <input matInput type="date" name="fecha_inicio" placeholder="Fecha Inicio" ngModel>
+                </mat-form-field>
+                <mat-form-field>
+                    <input matInput type="date" name="fecha_fin" placeholder="Fecha Termino" ngModel>
+                </mat-form-field>
+                <mat-divider></mat-divider>
+                <mat-form-field>
+                    <mat-select placeholder="Datos" name="datos"   multiple ngModel>
+                        <mat-option *ngFor="let dato of ListaDatos" [value]="dato">{{dato}}</mat-option>
+                    </mat-select>
+                </mat-form-field>
+                <mat-divider></mat-divider>
+                <button type="submit" mat-raised-button color="primary">Descargar</button>
+                <input type="hidden" name="id" value="{{vehiculo.id}}" ngModel>
+            </form>
         </mat-expansion-panel>
     </mat-accordion>
 </div>
