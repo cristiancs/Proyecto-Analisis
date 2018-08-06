@@ -1,4 +1,4 @@
-export class Vehiculo {
+export class ChartModel {
     id?: string
     empresa_id: string
     patente: string
@@ -12,4 +12,4 @@ export class Vehiculo {
     }
   }
 
-export default Vehiculo;
+export default ChartModel;

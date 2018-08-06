@@ -8,8 +8,8 @@ import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 
-import { Vehiculo } from './vehiculo.model';
-import { Enlace } from './enlace.model';
+import { Vehiculo } from '../models/vehiculo.model';
+import { Enlace } from '../models/enlace.model';
 
 @Injectable()
 export class DashboardService {
@@ -38,20 +38,6 @@ export class DashboardService {
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
         const url = urljoin(this.vehiculosUrl, 'fetchData');
         return this.http.post(url, body, { headers })
-                .map((response: Response) => {
-                    this.download(response.url, 'export.csv');
-                    return {'status': 'success'};
-                })
                 .catch((error: Response) => Observable.throw(error));
     }
-    download(dataurl, filename) {
-        const a = document.createElement('a');
-        a.href = dataurl;
-        a.setAttribute('download', filename);
-        const b = document.createEvent('MouseEvents');
-        b.initEvent('click', false, true);
-        a.dispatchEvent(b);
-        return false;
-    }
-
 }

@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, NgForm} from '@angular/forms';
-
+import { Chart } from 'chart.js';
 import { DashboardService } from './dashboard.service';
-import { Vehiculo } from './vehiculo.model';
+import { Vehiculo } from '../models/vehiculo.model';
+import { ChartModel } from '../models/ChartModel.model';
 import { subscribeOn } from 'rxjs/operator/subscribeOn';
 @Component({
     selector: 'app-dashboard-jefe-de-flota',
@@ -13,48 +14,96 @@ import { subscribeOn } from 'rxjs/operator/subscribeOn';
 export class DashboardJefeDeFlotaComponent implements OnInit{
     constructor(private dashboardService: DashboardService) {}
 
-   
+
     ListaDatos = ['Asset_id',
-        'Ts',
-        'Dev_id',
-        'Odometer',
-        'Total fuel*1',
-        'Engine hours',
-        'Actual speed',
-        'Actual engine speed',
-        'Actual engine torque',
-        'Kick down switch',
-        'Accelerator pedal position',
-        'Brake switch',
-        'Clutch switch',
-        'Cruise active',
-        'PTO active *2',
-        'Fuel level',
-        'Engine Temperatura',
-        'Turbo pressure',
-        'Axle weight 0',
-        'Axle weight 1',
-        'Axle weight 2'
+    'Ts',
+    'Dev_id',
+    'Odometer',
+    'Total fuel*1',
+    'Engine hours',
+    'Actual speed',
+    'Actual engine speed',
+    'Actual engine torque',
+    'Kick down switch',
+    'Accelerator pedal position',
+    'Brake switch',
+    'Clutch switch',
+    'Cruise active',
+    'PTO active *2',
+    'Fuel level',
+    'Engine Temperatura',
+    'Turbo pressure',
+    'Axle weight 0',
+    'Axle weight 1',
+    'Axle weight 2'
     ];
 
     vehiculos: Vehiculo[];
-    loading = true;
-
+    charts: {};
+    loading: boolean;
     ngOnInit() {
+        this.charts = {};
+        this.loading = true;
         this.dashboardService
-            .getVehiculos()
-            .then((vehiculos: Vehiculo[]) => {
-                    this.vehiculos = vehiculos;
-                    this.loading = false;
-            });
+        .getVehiculos()
+        .then((vehiculos: Vehiculo[]) => {
+            this.vehiculos = vehiculos;
+            this.loading = false;
+        });
+    }
+    tieneGrafico(id) {
+        return id.toString() in this.charts;
     }
 
-    onSubmit(form: NgForm){
-        console.log(form.value);
-        this.dashboardService.getData(form.value)
-        .subscribe(
-            status => {status === 'succes' ? console.log("Descarga Realizada") : console.log(status)},
-            error => {console.warn(error)}
-        );
+    getChart(id){
+        if(this.tieneGrafico(id)){
+            return;
+        }
+        this.charts[id] = true;
+        setTimeout(() => {
+            this.charts[id] = new Chart(document.getElementById("chartContainer-"+id), {
+              type: 'line',
+              data: {
+                labels: [1500,1600,1700,1750,1800,1850,1900,1950,1999,2050],
+                datasets: [{ 
+                    data: [86,114,106,106,107,111,133,221,783,2478],
+                    label: "Africa",
+                    borderColor: "#3e95cd",
+                    fill: false
+                  }, { 
+                    data: [282,350,411,502,635,809,947,1402,3700,5267],
+                    label: "Asia",
+                    borderColor: "#8e5ea2",
+                    fill: false
+                  }, { 
+                    data: [168,170,178,190,203,276,408,547,675,734],
+                    label: "Europe",
+                    borderColor: "#3cba9f",
+                    fill: false
+                  }, { 
+                    data: [40,20,10,16,24,38,74,167,508,784],
+                    label: "Latin America",
+                    borderColor: "#e8c3b9",
+                    fill: false
+                  }, { 
+                    data: [6,3,2,2,7,26,82,172,312,433],
+                    label: "North America",
+                    borderColor: "#c45850",
+                    fill: false
+                  }
+                ]
+              },
+              options: {
+                title: {
+                  display: true,
+                  text: 'World population per region (in millions)'
+                }
+              }
+            });
+        }, 100);
+        
+
+
+        
     }
 }

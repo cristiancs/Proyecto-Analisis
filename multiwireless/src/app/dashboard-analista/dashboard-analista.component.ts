@@ -2,7 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import {FormControl, NgForm} from '@angular/forms';
 
 import { DashboardService } from './dashboard.service';
-import { Vehiculo } from './vehiculo.model';
+import { Vehiculo } from '../models/vehiculo.model';
 import { subscribeOn } from 'rxjs/operator/subscribeOn';
 @Component({
     selector: 'app-dashboard-analista',
@@ -38,9 +38,10 @@ export class DashboardAnalistaComponent implements OnInit{
     ];
 
     vehiculos: Vehiculo[];
-    loading = true;
+    loading: boolean;
 
     ngOnInit() {
+        this.loading = true;
         this.dashboardService
             .getVehiculos()
             .then((vehiculos: Vehiculo[]) => {

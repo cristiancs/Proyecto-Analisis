@@ -1,1 +1,23 @@
-hola
+<div class="Vehiculos-listado">
+    <h2>Listado de Vehiculos</h2>
+    <mat-spinner *ngIf="loading"></mat-spinner>
+    <mat-accordion *ngIf="!loading">
+         
+        <mat-expansion-panel (opened)="getChart(vehiculo.id)" *ngFor="let vehiculo of vehiculos" data-id="{{vehiculo.id}}"  class="vehiculo">
+            <mat-expansion-panel-header>
+                <mat-panel-title>
+                    {{vehiculo.patente}}
+                </mat-panel-title>
+                <mat-panel-description>
+                        {{vehiculo.ruta}}
+                </mat-panel-description>
+            </mat-expansion-panel-header>
+            <ng-template matExpansionPanelContent>
+                <mat-spinner *ngIf="!tieneGrafico(vehiculo.id)"></mat-spinner>
+                <canvas *ngIf="tieneGrafico(vehiculo.id)" id="chartContainer-{{vehiculo.id}}">
+                    {{charts[id]}}
+                </canvas>
+            </ng-template>   
+        </mat-expansion-panel>
+    </mat-accordion>
+</div>

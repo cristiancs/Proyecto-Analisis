@@ -8,8 +8,8 @@ import 'rxjs/Rx';
 import 'rxjs/add/operator/toPromise';
 
 
-import { Vehiculo } from './vehiculo.model';
-import { Enlace } from './enlace.model';
+import { Vehiculo } from '../models/vehiculo.model';
+import { Enlace } from '../models/enlace.model';
 
 @Injectable()
 export class DashboardService {
