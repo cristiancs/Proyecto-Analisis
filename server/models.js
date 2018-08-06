@@ -39,5 +39,5 @@ connection
 		}
 		});
 	
-	
+
 	module.exports = db;
