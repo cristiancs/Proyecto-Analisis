@@ -6,7 +6,7 @@ import touch from 'touch';
 const app = express.Router();
 
 const vehiculos = [];
-const data = []
+let data = []
 
 for(let i = 0; i < 4; ++i){
     vehiculos.push({
@@ -16,31 +16,76 @@ for(let i = 0; i < 4; ++i){
         ruta: 'Santiago - Concepción'
     })
 }
-
-for(let i = 0; i < 4; ++i){
-    data.push({
-        'Asset_id': parseInt(Math.random()*100)*i,
-        'Ts': parseInt(Math.random()*100)*i,
-        'Dev_id': parseInt(Math.random()*100)*i,
-        'Odometer': parseInt(Math.random()*100)*i,
-        'Total fuel*1': parseInt(Math.random()*100)*i,
-        'Engine hours': parseInt(Math.random()*100)*i,
-        'Actual speed': parseInt(Math.random()*100)*i,
-        'Actual engine speed': parseInt(Math.random()*100)*i,
-        'Actual engine torque': parseInt(Math.random()*100)*i,
-        'Kick down switch': parseInt(Math.random()*100)*i,
-        'Accelerator pedal position': parseInt(Math.random()*100)*i,
-        'Brake switch': parseInt(Math.random()*100)*i,
-        'Clutch switch': parseInt(Math.random()*100)*i,
-        'Cruise active': parseInt(Math.random()*100)*i,
-        'PTO active *2': parseInt(Math.random()*100)*i,
-        'Fuel level': parseInt(Math.random()*100)*i,
-        'Engine Temperatura': parseInt(Math.random()*100)*i,
-        'Turbo pressure': parseInt(Math.random()*100)*i,
-        'Axle weight 0': parseInt(Math.random()*100)*i,
-        'Axle weight 1': parseInt(Math.random()*100)*i,
-        'Axle weight 2': parseInt(Math.random()*100)*i
-    })
+function time_convert(num)
+ { 
+  var hours = Math.floor(num / 60);  
+  var minutes = num % 60;
+  return hours + ":" + minutes;         
+}
+function randomIntFromInterval(min,max) {
+    return Math.floor(Math.random()*(max-min+1)+min);
+}
+function randomCruiseActive(i) {
+    if( parseInt(time_convert(i)[0], 10) % 3 == 0 ) {
+        return 0;
+    }
+    return 1;
+}
+function generateData(cantidad, datos=[]) {
+    const data = [];
+    for(let i = 0; i < cantidad; ++i){
+        let toPush = {};
+        if(datos.length > 0) {
+            
+            datos.forEach((dato) => {
+                switch(dato) {
+                    case "Ts":
+                        toPush[dato] = time_convert(i);
+                        break;
+                    case "Cruise active":
+                        toPush[dato] = randomCruiseActive(i);
+                        break;
+                    case "Actual speed":
+                        toPush[dato] = randomIntFromInterval(0, 90);
+                        break;
+                    case "Actual engine speed":
+                        toPush[dato] = randomIntFromInterval(1000,9000);
+                        break;
+                    default:
+                        toPush[dato] = parseInt(Math.random()*100)*i;
+                        break;
+                }
+               
+            })
+        } else {
+            toPush = {
+                'Asset_id': parseInt(Math.random()*100)*i,
+                'Ts': parseInt(Math.random()*100)*i,
+                'Dev_id': parseInt(Math.random()*100)*i,
+                'Odometer': parseInt(Math.random()*100)*i,
+                'Total fuel*1': parseInt(Math.random()*100)*i,
+                'Engine hours': parseInt(Math.random()*100)*i,
+                'Actual speed': randomIntFromInterval(0, 90),
+                'Actual engine speed': randomIntFromInterval(1000,9000),
+                'Actual engine torque': parseInt(Math.random()*100)*i,
+                'Kick down switch': parseInt(Math.random()*100)*i,
+                'Accelerator pedal position': parseInt(Math.random()*100)*i,
+                'Brake switch': parseInt(Math.random()*100)*i,
+                'Clutch switch': parseInt(Math.random()*100)*i,
+                'Cruise active': parseInt(time_convert(i)[1], 10) % 3 == 0 ? 0 : 1,
+                'PTO active *2': parseInt(Math.random()*100)*i,
+                'Fuel level': parseInt(Math.random()*100)*i,
+                'Engine Temperatura': parseInt(Math.random()*100)*i,
+                'Turbo pressure': parseInt(Math.random()*100)*i,
+                'Axle weight 0': parseInt(Math.random()*100)*i,
+                'Axle weight 1': parseInt(Math.random()*100)*i,
+                'Axle weight 2': parseInt(Math.random()*100)*i
+            }
+        }
+        data.push(toPush);
+    }
+    return data;
+ 
 }
 
 app.get('/', (req, res) => {
@@ -48,6 +93,21 @@ app.get('/', (req, res) => {
    
     res.status(200).json(vehiculos.filter(vehiculo => vehiculo.empresa_id == empresa_id ));
 })
+
+app.get('/graph', (req, res) => {
+    const { empresa_id, vehiculo } = req.query;
+    data = generateData(5000, ["Ts", "Cruise active", "Actual speed", "Actual engine speed"]);
+    
+    const horas = data.map(el => el.Ts);
+    const crucero = data.map(el => el["Cruise active"]);
+    const velocidad = data.map(el => el["Actual speed"]);
+    const rpm = data.map(el => el["Actual engine speed"]);
+    res.status(200).json({horas, crucero, velocidad, rpm})
+    
+
+
+})
+
 
 
 app.post('/fetchData', (req, res) => {
@@ -59,6 +119,7 @@ app.post('/fetchData', (req, res) => {
     fs.closeSync(fs.openSync(ruta, 'w'));
 
     console.log("HI");
+    data = generateData(10);
 
     writer.pipe(fs.createWriteStream(ruta))
     data.forEach((linea) => {

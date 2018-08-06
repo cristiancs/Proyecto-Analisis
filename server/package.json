@@ -4,7 +4,9 @@
   "description": "",
   "main": "server.js",
   "scripts": {
-    "start:server": "set NODE_ENV=development && set DEBUG=mw* && nodemon index.js --exec babel-node"
+    "start:server": "set NODE_ENV=development && set DEBUG=mw* && nodemon index.js --exec babel-node",
+    "start:debug": "set NODE_ENV=development && set DEBUG=mw* && nodemon index.js --inspect --exec babel-node"
+
   },
   "author": "",
   "license": "ISC",

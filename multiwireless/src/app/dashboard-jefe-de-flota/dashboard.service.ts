@@ -33,11 +33,12 @@ export class DashboardService {
 
     }
 
-    getData(data) {
+    requestChart(data) {
         const body = JSON.stringify(data);
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
-        const url = urljoin(this.vehiculosUrl, 'fetchData');
+        const url = urljoin(this.vehiculosUrl, 'graph');
         return this.http.post(url, body, { headers })
                 .catch((error: Response) => Observable.throw(error));
     }
+
 }
