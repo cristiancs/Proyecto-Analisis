@@ -27,9 +27,9 @@ function randomIntFromInterval(min,max) {
 }
 function randomCruiseActive(i) {
     if( parseInt(time_convert(i)[0], 10) % 3 == 0 ) {
-        return 0;
+        return 1;
     }
-    return 1;
+    return 0;
 }
 function generateData(cantidad, datos=[]) {
     const data = [];
@@ -46,7 +46,7 @@ function generateData(cantidad, datos=[]) {
                         toPush[dato] = randomCruiseActive(i);
                         break;
                     case "Actual speed":
-                        toPush[dato] = randomIntFromInterval(0, 90);
+                        toPush[dato] = randomIntFromInterval(50, 60);
                         break;
                     case "Actual engine speed":
                         toPush[dato] = randomIntFromInterval(1000,9000);
@@ -96,7 +96,7 @@ app.get('/', (req, res) => {
 
 app.get('/graph', (req, res) => {
     const { empresa_id, vehiculo } = req.query;
-    data = generateData(5000, ["Ts", "Cruise active", "Actual speed", "Actual engine speed"]);
+    data = generateData(1440, ["Ts", "Cruise active", "Actual speed", "Actual engine speed"]);
     
     const horas = data.map(el => el.Ts);
     const crucero = data.map(el => el["Cruise active"]);
