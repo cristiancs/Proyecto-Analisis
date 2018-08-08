@@ -3,7 +3,7 @@ import {FormControl, NgForm} from '@angular/forms';
 import { Chart } from 'chart.js';
 import { DashboardService } from './dashboard.service';
 import { Vehiculo } from '../models/vehiculo.model';
-import { ChartModel } from '../models/ChartModel.model';
+import { ChartModel } from '../models/chartModel.model';
 import { subscribeOn } from 'rxjs/operator/subscribeOn';
 @Component({
     selector: 'app-dashboard-jefe-de-flota',

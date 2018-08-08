@@ -6,7 +6,6 @@
   "scripts": {
     "start:server": "set NODE_ENV=development && set DEBUG=mw* && nodemon index.js --exec babel-node",
     "start:debug": "set NODE_ENV=development && set DEBUG=mw* && nodemon index.js --inspect --exec babel-node"
-
   },
   "author": "",
   "license": "ISC",
@@ -20,6 +19,7 @@
     "mysql2": "^1.6.1",
     "nodemon": "^1.17.3",
     "sequelize": "^4.38.0",
+    "sqlite3": "^4.0.2",
     "touch": "^3.1.0"
   }
 }

@@ -2,20 +2,38 @@ import express from 'express'
 import csvWriter from 'csv-write-stream';
 import fs from 'fs';
 import touch from 'touch';
+const Sequelize = require('sequelize');
+
+
+const sequelize = new Sequelize('database', 'username', 'password', {
+    host: 'localhost',
+    dialect: 'sqlite',
+    operatorsAliases: false,
+    pool: {
+        max: 5,
+    min: 0,
+    acquire: 30000,
+    idle: 10000
+  },
+
+  // SQLite only
+  storage: './multiwireless.sqlite.db'
+});
+
+
+const Vehiculos = sequelize.define('vehiculos', {
+    id: {type: Sequelize.INTEGER , primaryKey: true },
+    empresa: Sequelize.INTEGER,
+    patente: Sequelize.STRING,
+    ruta: Sequelize.STRING,
+}, { timestamps: false });
+
 
 const app = express.Router();
 
 const vehiculos = [];
 let data = []
 
-for(let i = 0; i < 4; ++i){
-    vehiculos.push({
-        id: i,
-        empresa_id: 1,
-        patente: `DJ23${i}`,
-        ruta: 'Santiago - Concepción'
-    })
-}
 function time_convert(num)
  { 
   var hours = Math.floor(num / 60);  
@@ -90,8 +108,14 @@ function generateData(cantidad, datos=[]) {
 
 app.get('/', (req, res) => {
     const { empresa_id } = req.query;
-   
-    res.status(200).json(vehiculos.filter(vehiculo => vehiculo.empresa_id == empresa_id ));
+    Vehiculos.findAll({
+      where: {
+        empresa: parseInt(empresa_id),
+      }
+    }).then(vehiculos => {
+        console.log(vehiculos);
+        res.status(200).json(vehiculos);
+    });
 })
 
 app.get('/graph', (req, res) => {
