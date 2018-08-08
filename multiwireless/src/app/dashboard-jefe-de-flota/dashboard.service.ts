@@ -34,10 +34,9 @@ export class DashboardService {
     }
 
     requestChart(data) {
-        const body = JSON.stringify(data);
         const headers = new HttpHeaders({'Content-Type': 'application/json'});
-        const url = urljoin(this.vehiculosUrl, 'graph');
-        return this.http.get(url, body, { headers })
+        const url = urljoin(this.vehiculosUrl, 'graph','?vehiculo='+data.id);
+        return this.http.get(url, { headers })
                  .toPromise()
                  .then(response => response as any[])
                 .catch((error: Response) => Observable.throw(error));

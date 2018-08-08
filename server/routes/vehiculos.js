@@ -3,7 +3,7 @@ import csvWriter from 'csv-write-stream';
 import fs from 'fs';
 import touch from 'touch';
 const Sequelize = require('sequelize');
-
+const Op = Sequelize.Op;
 
 const sequelize = new Sequelize('database', 'username', 'password', {
     host: 'localhost',
@@ -31,6 +31,7 @@ const Vehiculos = sequelize.define('vehiculos', {
 
 const Logs = sequelize.define('logs', {
     id: {type: Sequelize.INTEGER , primaryKey: true },
+    time: Sequelize.STRING,
     ns1   : Sequelize.INTEGER,
     imei  : Sequelize.INTEGER,
     ns2   : Sequelize.STRING,
@@ -141,20 +142,42 @@ app.get('/', (req, res) => {
         empresa: parseInt(empresa_id),
       }
     }).then(vehiculos => {
-        console.log(vehiculos);
         res.status(200).json(vehiculos);
     });
 })
 
 app.get('/graph', (req, res) => {
     const { empresa_id, vehiculo } = req.query;
-    data = generateData(1440, ["Ts", "Cruise active", "Actual speed", "Actual engine speed"]);
+    if(isNaN(vehiculo)) {
+        res.status(400).json({message : "Vehiculo id not supplied"})
+    }
+    Vehiculos.findAll({
+      where: {
+        id: parseInt(vehiculo),
+      }
+    }).then(vehiculos => {
+        Logs.findAll({
+            attributes: ['time', 'cruise_active', 'actual_speed', 'actual_engine_speed'],
+            where: {
+                    imei: parseInt(vehiculos[0].imei),
+                    time: {
+                        [Op.like]: "%2017-10-01%"
+                    }
+            }
+        }).then(data => {
+            const horas = data.map(el => el.time);
+            const crucero = data.map(el => el.cruise_active == "t" ? 1 : 0);
+            const velocidad = data.map(el => el.actual_speed);
+            const rpm = data.map(el => el.actual_engine_speed);
+            res.status(200).json({horas, crucero, velocidad, rpm})
+        });
+
+    });
     
-    const horas = data.map(el => el.Ts);
-    const crucero = data.map(el => el["Cruise active"]);
-    const velocidad = data.map(el => el["Actual speed"]);
-    const rpm = data.map(el => el["Actual engine speed"]);
-    res.status(200).json({horas, crucero, velocidad, rpm})
+
+    
+   
+    //
     
 
 
