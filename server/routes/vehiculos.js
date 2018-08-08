@@ -26,6 +26,34 @@ const Vehiculos = sequelize.define('vehiculos', {
     empresa: Sequelize.INTEGER,
     patente: Sequelize.STRING,
     ruta: Sequelize.STRING,
+    imei: Sequelize.INTEGER
+}, { timestamps: false });
+
+const Logs = sequelize.define('logs', {
+    id: {type: Sequelize.INTEGER , primaryKey: true },
+    ns1   : Sequelize.INTEGER,
+    imei  : Sequelize.INTEGER,
+    ns2   : Sequelize.STRING,
+    odometer  : Sequelize.INTEGER,
+    total_fuel    : Sequelize.INTEGER,
+    engine_hours  : Sequelize.INTEGER,
+    actual_speed  : Sequelize.INTEGER,
+    actual_engine_speed   : Sequelize.INTEGER,
+    engine_torque : Sequelize.INTEGER,
+    kick_down_switch  : Sequelize.STRING,
+    accelerator_pedal : Sequelize.INTEGER,
+    brake_switch  : Sequelize.STRING,
+    clutch_switch : Sequelize.STRING,
+    cruise_active : Sequelize.STRING,
+    pto_active    : Sequelize.INTEGER,
+    fuel_level    : Sequelize.INTEGER,
+    engine_temperature    : Sequelize.INTEGER,
+    turbo_presure : Sequelize.INTEGER,
+    axle_0    : Sequelize.INTEGER,
+    axle_1    : Sequelize.INTEGER,
+    axle_2    : Sequelize.INTEGER,
+    axle_3    : Sequelize.INTEGER,
+    service_distance  : Sequelize.INTEGER
 }, { timestamps: false });
 
 
