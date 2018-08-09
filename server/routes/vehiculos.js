@@ -31,7 +31,7 @@ const Vehiculos = sequelize.define('vehiculos', {
 
 const Logs = sequelize.define('logs', {
     id: {type: Sequelize.INTEGER , primaryKey: true },
-    time: Sequelize.STRING,
+    time: Sequelize.DATE,
     ns1   : Sequelize.INTEGER,
     imei  : Sequelize.INTEGER,
     ns2   : Sequelize.STRING,
@@ -123,7 +123,7 @@ app.post('/fetchData', (req, res) => {
             where: {
                     imei: parseInt(vehiculos[0].imei),
                     time: {
-                        [Op.like]: "%2017-10-01%"
+                        [Op.between]: [fecha_inicio, fecha_fin]
                     }
             }
         }).then(data => {
