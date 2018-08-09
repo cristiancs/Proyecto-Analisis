@@ -1,10 +1,10 @@
 export class ChartModel {
-    id?: string
-    empresa_id: string
-    patente: string
-    ruta: string
+    horas: array
+    velocidad: array
+    crucero: array
+    rpm: array
   
-    constructor(id: string, empresa_id: string, patente: string, ruta: string) {
+    constructor(id: array, empresa_id: array, patente: array, ruta: array) {
       this.id = id
       this.empresa_id = empresa_id
       this.patente = patente

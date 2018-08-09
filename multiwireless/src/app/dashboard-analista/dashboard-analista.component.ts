@@ -14,27 +14,30 @@ export class DashboardAnalistaComponent implements OnInit{
     constructor(private dashboardService: DashboardService) {}
 
    
-    ListaDatos = ['Asset_id',
-        'Ts',
-        'Dev_id',
-        'Odometer',
-        'Total fuel*1',
-        'Engine hours',
-        'Actual speed',
-        'Actual engine speed',
-        'Actual engine torque',
-        'Kick down switch',
-        'Accelerator pedal position',
-        'Brake switch',
-        'Clutch switch',
-        'Cruise active',
-        'PTO active *2',
-        'Fuel level',
-        'Engine Temperatura',
-        'Turbo pressure',
-        'Axle weight 0',
-        'Axle weight 1',
-        'Axle weight 2'
+    ListaDatos = ['time',
+        'ns1',
+        'imei',
+        'ns2',
+        'odometer',
+        'total_fuel',
+        'engine_hours',
+        'actual_speed',
+        'actual_engine_speed',
+        'engine_torque',
+        'kick_down_switch',
+        'accelerator_pedal',
+        'brake_switch',
+        'clutch_switch',
+        'cruise_active',
+        'pto_active',
+        'fuel_level',
+        'engine_temperature',
+        'turbo_presure',
+        'axle_0',
+        'axle_1',
+        'axle_2',
+        'axle_3',
+        'service_distance',
     ];
 
     vehiculos: Vehiculo[];
@@ -50,8 +53,8 @@ export class DashboardAnalistaComponent implements OnInit{
             });
     }
 
-    onSubmit(form: NgForm){
-        console.log(form.value);
+    onSubmit(form: NgForm, id: integer){
+        form.value.id = id;
         this.dashboardService.getData(form.value)
         .subscribe(
             status => {status === 'succes' ? console.log("Descarga Realizada") : console.log(status)},

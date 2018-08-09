@@ -12,7 +12,7 @@
                     {{vehiculo.ruta}}
             </mat-panel-description>
             </mat-expansion-panel-header>
-            <form (ngSubmit)="onSubmit(f)" #f="ngForm"  > 
+            <form (ngSubmit)="onSubmit(f, vehiculo.id)" #f="ngForm"  > 
                 <mat-form-field>
                     <input matInput type="date" name="fecha_inicio" placeholder="Fecha Inicio" ngModel>
                 </mat-form-field>
@@ -26,8 +26,7 @@
                     </mat-select>
                 </mat-form-field>
                 <mat-divider></mat-divider>
-                <button type="submit" mat-raised-button color="primary">Descargar</button>
-                <input type="hidden" name="id" value="{{vehiculo.id}}" ngModel>
+                <button type="submit" mat-raised-button color="primary">Descargar </button>
             </form>
         </mat-expansion-panel>
     </mat-accordion>
