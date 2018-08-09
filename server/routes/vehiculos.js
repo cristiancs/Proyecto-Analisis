@@ -89,7 +89,7 @@ app.get('/graph', (req, res) => {
             where: {
                     imei: parseInt(vehiculos[0].imei),
                     time: {
-                        [Op.like]: "%2017-10-01%"
+                        [Op.between]: ["2017-10-31", "2017-11-02"]
                     }
             }
         }).then(data => {
