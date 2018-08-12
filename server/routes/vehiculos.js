@@ -118,8 +118,9 @@ app.post('/fetchData', (req, res) => {
         id: parseInt(id),
       }
     }).then(vehiculos => {
+        console.log(datos.filter(item => item !== "id"));
         Logs.findAll({
-            attributes: [datos.filter(item => item !== "id")],
+            attributes: datos.filter(item => item !== "id"),
             where: {
                     imei: parseInt(vehiculos[0].imei),
                     time: {
