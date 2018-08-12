@@ -53,7 +53,7 @@ export class DashboardAnalistaComponent implements OnInit{
             });
     }
 
-    onSubmit(form: NgForm, id: integer){
+    onSubmit(form: NgForm, id: Number){
         form.value.id = id;
         this.dashboardService.getData(form.value)
         .subscribe(

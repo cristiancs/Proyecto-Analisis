@@ -3,7 +3,6 @@ import {FormControl, NgForm} from '@angular/forms';
 import { Chart } from 'chart.js';
 import { DashboardService } from './dashboard.service';
 import { Vehiculo } from '../models/vehiculo.model';
-import { ChartModel } from '../models/chartModel.model';
 import { subscribeOn } from 'rxjs/operator/subscribeOn';
 @Component({
     selector: 'app-dashboard-jefe-de-flota',
@@ -36,7 +35,7 @@ export class DashboardJefeDeFlotaComponent implements OnInit{
         }
         this.dashboardService
         .requestChart({id})
-        .then((charts: any{}) => {
+        .then((charts: any) => {
             this.charts[id] = true;
             setTimeout(() => {
                 this.charts[id] = new Chart(document.getElementById("chartContainer-"+id), {
