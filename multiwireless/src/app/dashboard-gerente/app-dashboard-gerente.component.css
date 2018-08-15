@@ -4,3 +4,13 @@
 mat-spinner{
     margin:auto;
 }
+
+.Dashboard-container{
+	display: flex;
+	padding: 1em;
+}
+.mat-card {
+	width: 50%;
+	box-sizing: contain;
+	margin: 1em;
+}

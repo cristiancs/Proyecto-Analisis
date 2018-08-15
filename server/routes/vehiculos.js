@@ -114,7 +114,7 @@ app.get('/gerente_graph', (req, res) => {
         return new Promise((resolve, reject) => {
              vehiculos.forEach(vehiculo => {
                 Logs.findAll({
-                    attributes: ['time', 'cruise_active', 'actual_speed', 'actual_engine_speed'],
+                    attributes: ['actual_speed', 'actual_engine_speed'],
                     where: {
                             imei: parseInt(vehiculo.imei),
                             time: {
@@ -133,11 +133,70 @@ app.get('/gerente_graph', (req, res) => {
 
                     const suma = toStore[0] + toStore[1];
                     
-                    resolve( toStore.map((data) => Math.round( (data/suma)*100) ) );
+                    resolve( toStore.map((data) => parseFloat( (data/suma)*100).toFixed(1) ) );
                     
                 });
             });
         })
+    }
+
+    function getConsumption(vehiculos, month) {
+        let initialData = {};
+        let respuesta = [];
+         return new Promise((resolve, reject) => {
+            vehiculos.forEach(vehiculo => {
+                Logs.findAll({
+                    attributes: ['time','odometer', 'total_fuel'],
+                    where: {
+                        imei: parseInt(vehiculo.imei),
+                        time: {
+                            [Op.between] : [
+                                new Date(2017, month, 1).toISOString().split("T")[0],
+                                new Date(2017, month, 10).toISOString().split("T")[0]
+                            ]
+                        }
+                    },
+                    order: [['time', 'DESC']]
+                }).then(data => {
+                    if(data.length > 0) {
+                        initialData[vehiculo.imei] = {};
+                        initialData[vehiculo.imei].odometer = data[0].odometer;
+                        initialData[vehiculo.imei].total_fuel = data[0].total_fuel;
+                    }
+                    Logs.findAll({
+                        attributes: ['time','odometer', 'total_fuel'],
+                        where: {
+                            imei: parseInt(vehiculo.imei),
+                             time: {
+                                [Op.between] : [ 
+                                    new Date(2017, month, -5).toISOString().split("T")[0], 
+                                    new Date(2017, month, 0).toISOString().split("T")[0]
+                                ]
+                            }
+                        },
+                        order: [['time', 'ASC']]
+                    }).then(data => {
+                        if(data.length > 0 && typeof initialData[vehiculo.imei] !== "undefined") {
+                            const kilometros = data[0].odometer - initialData[vehiculo.imei].odometer;
+                            const litros = data[0].total_fuel - initialData[vehiculo.imei].total_fuel;
+                            console.log("data[0].odometer", data[0].odometer);
+                            console.log("initialData[vehiculo.imei].odometer", initialData[vehiculo.imei].odometer);
+                            respuesta.push(kilometros/litros);
+                        }
+                        if(vehiculo.imei == vehiculos[vehiculos.length-1].imei) {
+                            if(respuesta.length > 0) {
+                                resolve([month, parseFloat(respuesta.reduce((a, b) => a + b, 0) / respuesta.length).toFixed(2) ])
+                            } else {
+                                resolve([month, 0]);
+                            }
+                            
+                        }
+                       
+                    })
+                })
+            })
+        })
+            
     }
     Vehiculos.findAll({
       where: {
@@ -145,17 +204,40 @@ app.get('/gerente_graph', (req, res) => {
       }
     }).then(vehiculos => {
         
-        let ralenti_this_month = {}
+        let ralenti_this_month = {};
         let ralenti_last_month = {};
-        getRalenti(vehiculos, "2017-10-01", "2017-10-31", ralenti_this_month, ralenti_last_month)
-        .then((data) => {
-            ralenti_last_month = data;
-            getRalenti(vehiculos, "2017-11-01", "2017-11-31", ralenti_this_month, ralenti_last_month)
-            .then((data) => {
-                 ralenti_this_month = data;
-                res.status(200).json({ralenti: {ralenti_this_month, ralenti_last_month}});
-            });
-        })
+        let promedios_combustible = {};
+        const actual_month = 12;
+        for (var i = actual_month - 6; i <= actual_month; i++) {
+            getConsumption(vehiculos,i).then((data) => {
+                const numero = data[0];
+                const promedio = data[1];
+                promedios_combustible[numero] = promedio;
+
+
+                if(numero == actual_month) {
+                    getRalenti(vehiculos, "2017-10-01", "2017-10-31", ralenti_this_month, ralenti_last_month)
+                    .then((data) => {
+                        ralenti_last_month = data;
+                        getRalenti(vehiculos, "2017-11-01", "2017-11-31", ralenti_this_month, ralenti_last_month)
+                        .then((data) => {
+                            ralenti_this_month = data;
+                            res.status(200).json({
+                                ralenti: {ralenti_this_month, ralenti_last_month},
+                                consumo: {ejes: Object.keys(promedios_combustible), datos: Object.values(promedios_combustible)}
+                            });
+                        });
+                    })
+                }
+                
+            })
+            
+            
+        }
+       
+        
+
+        
 
     });
 })
