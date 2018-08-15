@@ -103,6 +103,63 @@ app.get('/graph', (req, res) => {
     });
 })
 
+app.get('/gerente_graph', (req, res) => {
+    const { empresa_id } = req.query;
+    if(isNaN(empresa_id)) {
+        res.status(400).json({message : "empresa_id id not supplied"})
+    }
+
+    function getRalenti(vehiculos, init, finish) {
+        const toStore = [0, 0];
+        return new Promise((resolve, reject) => {
+             vehiculos.forEach(vehiculo => {
+                Logs.findAll({
+                    attributes: ['time', 'cruise_active', 'actual_speed', 'actual_engine_speed'],
+                    where: {
+                            imei: parseInt(vehiculo.imei),
+                            time: {
+                                [Op.between]: [init, finish]
+                            }
+                    }
+                }).then(data => {
+                    data.forEach(log => {
+                        if(log.actual_speed == 0 && log.actual_engine_speed != 0) {
+                            toStore[0] +=1;
+                        } else if (log.actual_speed > 0) {
+                            toStore[1] +=1;
+                        }
+                       
+                    })
+
+                    const suma = toStore[0] + toStore[1];
+                    
+                    resolve( toStore.map((data) => Math.round( (data/suma)*100) ) );
+                    
+                });
+            });
+        })
+    }
+    Vehiculos.findAll({
+      where: {
+        empresa: parseInt(empresa_id),
+      }
+    }).then(vehiculos => {
+        
+        let ralenti_this_month = {}
+        let ralenti_last_month = {};
+        getRalenti(vehiculos, "2017-10-01", "2017-10-31", ralenti_this_month, ralenti_last_month)
+        .then((data) => {
+            ralenti_last_month = data;
+            getRalenti(vehiculos, "2017-11-01", "2017-11-31", ralenti_this_month, ralenti_last_month)
+            .then((data) => {
+                 ralenti_this_month = data;
+                res.status(200).json({ralenti: {ralenti_this_month, ralenti_last_month}});
+            });
+        })
+
+    });
+})
+
 
 
 app.post('/fetchData', (req, res) => {

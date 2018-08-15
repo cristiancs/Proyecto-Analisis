@@ -45,22 +45,53 @@ export class DashboardJefeDeFlotaComponent implements OnInit{
                     datasets: [{ 
                         data: charts.velocidad,
                         label: "Velocidad",
-                        borderColor: "#3e95cd",
-                        fill: false
+                        yAxisID: 'A',
+                        borderColor: "rgba(62, 149, 205, 0.600)",
+                        backgroundColor: "rgba(62, 149, 205, 0.500)",
+                        fill: true,
                       }, { 
                         data: charts.crucero,
                         label: "Crucero",
                         borderColor: "#8e5ea2",
+                        backgroundColor: "#8e5ea2",
+                        yAxisID: 'B',
                         fill: false
                       }, { 
                         data: charts.rpm,
                         label: "Revoluciones",
-                        borderColor: "#3cba9f",
-                        fill: false
+                        yAxisID: 'C',
+                        borderColor: "rgba(60, 186, 159, 0.600)",
+                        backgroundColor: "rgba(60, 186, 159, 0.500)",
+                        fill: true
                       }
                     ]
                   },
                   options: {
+                    scales: {
+                        yAxes: [
+                            {
+                                id: 'A',
+                                type: 'linear',
+                                position: 'left',
+                            }, 
+                            {
+                                id: 'B',
+                                type: 'linear',
+                                position: 'left',
+                                ticks: {
+                                    max: 1,
+                                    min: 0,
+                                    stepSize: 1
+                                }
+                                
+                            },
+                            {
+                                id: 'C',
+                                type: 'linear',
+                                position: 'right',
+                            }
+                        ],
+                    },
                     title: {
                       display: false,
                       text: 'World population per region (in millions)'
