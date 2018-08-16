@@ -4,9 +4,10 @@
       <span class="example-spacer"></span>
   
       <span class="example-spacer"></span>
-      <span>
-        <mat-icon class="example-icon">person</mat-icon>
-        <span>Cuenta</span>
+      <span *ngIf="authService.isLoggedIn()">
+        
+        <button mat-button (click)="logout()">
+        	<mat-icon class="example-icon">person</mat-icon> Cerrar Sesión</button>
       </span>
     </mat-toolbar-row>
 </mat-toolbar>

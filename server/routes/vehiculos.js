@@ -2,23 +2,11 @@ import express from 'express'
 import csvWriter from 'csv-write-stream';
 import fs from 'fs';
 import touch from 'touch';
+import sequalizeConnect from '../sequalizeConnect';
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
-const sequelize = new Sequelize('database', 'username', 'password', {
-    host: 'localhost',
-    dialect: 'sqlite',
-    operatorsAliases: false,
-    pool: {
-        max: 5,
-    min: 0,
-    acquire: 30000,
-    idle: 10000
-  },
-
-  // SQLite only
-  storage: './multiwireless.sqlite.db'
-});
+const sequelize = sequalizeConnect;
 
 
 const Vehiculos = sequelize.define('vehiculos', {

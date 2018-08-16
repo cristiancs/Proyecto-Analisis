@@ -17,7 +17,7 @@ export class DashboardGerenteComponent implements OnInit{
 
     vehiculos: Vehiculo[];
     loading: boolean;
-    charts: {};
+    charts: any;
 
     ngOnInit() {
         this.loading = true;
@@ -35,7 +35,7 @@ export class DashboardGerenteComponent implements OnInit{
                                 datasets: [
                                     {
                                         data: data.ralenti.ralenti_this_month,
-                                        backgroundColor: ["rgba(255, 100, 133, 1.000)", "rgba(55, 162, 235, 1.000)"]
+                                        backgroundColor: ["rgba(255, 100, 133, 1.000)", "rgba(55, 162, 235, 1.000)"],
                                         label: 'Este Mes' 
                                     }, 
                                 ],
@@ -50,7 +50,7 @@ export class DashboardGerenteComponent implements OnInit{
                                   text: 'Este Mes'
                                 }
                             }
-                        );
+                        })
 
                         this.charts.ralenti_last_month = new Chart(document.getElementById("ralentiChart2"),{
                             type: 'doughnut',
@@ -58,7 +58,7 @@ export class DashboardGerenteComponent implements OnInit{
                                 datasets: [
                                     {
                                         data: data.ralenti.ralenti_last_month,
-                                        backgroundColor: ["rgba(255, 100, 133, 1.000)", "rgba(55, 162, 235, 1.000)"]
+                                        backgroundColor: ["rgba(255, 100, 133, 1.000)", "rgba(55, 162, 235, 1.000)"],
                                         label: 'Este Mes' 
                                     }, 
                                 ],
@@ -73,7 +73,7 @@ export class DashboardGerenteComponent implements OnInit{
                                   text: 'Mes Pasado'
                                 }
                             }
-                        );
+                        })
 
                         this.charts.consumo = new Chart(document.getElementById("consumoChart"),{
                             type: 'bar',
@@ -90,7 +90,7 @@ export class DashboardGerenteComponent implements OnInit{
                                 ]
                             },
                            
-                        );
+                        })
 
 
 
