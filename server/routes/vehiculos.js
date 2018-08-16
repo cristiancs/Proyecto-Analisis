@@ -3,6 +3,8 @@ import csvWriter from 'csv-write-stream';
 import fs from 'fs';
 import touch from 'touch';
 import sequalizeConnect from '../sequalizeConnect';
+import * as jwt from 'jsonwebtoken';
+
 const Sequelize = require('sequelize');
 const Op = Sequelize.Op;
 
@@ -53,6 +55,9 @@ let data = []
 
 app.get('/', (req, res) => {
     const { empresa_id } = req.query;
+    if(isNaN(empresa_id)) {
+        res.status(400).json({message : "Empresa id not supplied"})
+    }
     Vehiculos.findAll({
       where: {
         empresa: parseInt(empresa_id),
@@ -233,8 +238,10 @@ app.get('/gerente_graph', (req, res) => {
 
 
 app.post('/fetchData', (req, res) => {
-    const {fecha_inicio, fecha_fin, id, datos} = req.body;
-    const empresa_id = 1;
+    const {fecha_inicio, fecha_fin, id, datos, empresa_id} = req.body;
+    if(isNaN(empresa_id)) {
+        res.status(400).json({message : "Empresa id not supplied"})
+    }
     const ruta = `public/${(new Date).getTime()}.csv`;
     console.log(datos);
     if(isNaN(id)) {

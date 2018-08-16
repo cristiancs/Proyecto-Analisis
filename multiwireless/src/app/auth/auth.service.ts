@@ -15,7 +15,8 @@ export class AuthService {
       
     login(email:string, password:string ) {
         return this.http.post(urljoin(environment.apiUrl, 'auth/login'), {email, password})
-            .shareReplay();
+            .shareReplay()
+           
     }
 
           
@@ -41,6 +42,9 @@ export class AuthService {
     }
     getRole() {
     	return jwtDecode(localStorage.getItem("id_token")).role;
+    }
+    getEmpresa() {
+    	return jwtDecode(localStorage.getItem("id_token")).empresa;
     }
 
 

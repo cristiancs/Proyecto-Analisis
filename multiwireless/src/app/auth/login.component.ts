@@ -52,6 +52,9 @@ export class LoginComponent implements OnInit {
                     (data) => {
                     	this.authService.setSession(data);
                  		this.checkRedirect();
+                    },
+                    (err) => {
+            			alert("Usuario o contraseña incorrecto");
                     }
                 );
         }
