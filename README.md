@@ -17,7 +17,13 @@
     cd multiwireless
     ng serve
 
-# Las vistas se encuentran las siguientes URL:
-    http://localhost:4200/dashboard-analista
-    http://localhost:4200/dashboard-jefe-de-flota
-   
+# Usuarios de prueba
+## Gerente
+    gerente@c.com
+    123
+## Analista
+    analista@c.com
+    123
+## Jefe de Flota
+    jefeflota@c.com
+    123
