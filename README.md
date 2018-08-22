@@ -6,6 +6,11 @@
     cd ../multiwireless
     npm i
 
+## 
+
+Importar el archivo sql a la bd (el archivo se encuentra en server/multiwireless_2018-08-21.sql.zip), notar que esta comprimido en zip y dentro esta el sql (para ahorrar espacio en la subida). 
+
+Configurar sequalizeConnect.js con los datos correctos para la bd mysql.
 
 # Ejecución
 
