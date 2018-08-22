@@ -1,8 +1,8 @@
 const Sequelize = require('sequelize');
 
-export default new Sequelize('database', 'username', 'password', {
+export default new Sequelize('multiwireless', 'root', '', {
     host: 'localhost',
-    dialect: 'sqlite',
+    dialect: 'mysql',
     operatorsAliases: false,
     pool: {
         max: 5,
@@ -12,5 +12,5 @@ export default new Sequelize('database', 'username', 'password', {
   },
 
   // SQLite only
-  storage: './multiwireless.sqlite.db'
+  //storage: './multiwireless.sqlite.db'
 });
